@@ -1,0 +1,8 @@
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/button"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:padding="4dp"
+    android:text="Button"
+    app:srcCompat="@color/colorAccent" />
