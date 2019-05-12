@@ -64,9 +64,9 @@ public class LearnActivty extends AppCompatActivity {
         String[] projection = {
                 BaseColumns._ID,
                 TopicContract.TopicEntry.COLUMN_NAME_TITLE,
-                TopicContract.TopicEntry.COLUMN_NAME_CHAPTERS,
-                TopicContract.TopicEntry.COLUMN_NAME_COMPLETED,
-                TopicContract.TopicEntry.COLUMN_NAME_ACTIVITY,
+               // TopicContract.TopicEntry.COLUMN_NAME_CHAPTERS,
+               // TopicContract.TopicEntry.COLUMN_NAME_COMPLETED,
+              //  TopicContract.TopicEntry.COLUMN_NAME_ACTIVITY,
                 TopicContract.TopicEntry.COLUMN_NAME_ICON
         };
 
@@ -88,15 +88,14 @@ public class LearnActivty extends AppCompatActivity {
         );
 
         while(cursor.moveToNext()) {
-            try {
-                topics.add(new TopicItem(cursor.getInt(0), cursor.getString(1), cursor.getInt(2),cursor.getInt(3), Class.forName(cursor.getString(4)),cursor.getString(5)));
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                Toast.makeText(this, "Activity " + cursor.getString(3).substring(cursor.getString(3).lastIndexOf(".") + 1) + " not found!", Toast.LENGTH_LONG).show();
-            }
+            topics.add(new TopicItem(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
         }
 
         cursor.close();
+
+        for(TopicItem topicItem:topics){
+            TopicContract.TopicEntry.setChaptersCompleted(db,topicItem);
+        }
 
         return topics;
     }

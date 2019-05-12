@@ -67,8 +67,8 @@ public class TopicActivity extends AppCompatActivity {
                 BaseColumns._ID,
                 ChapterContract.ChapterEntry.COLUMN_NAME_TOPIC,
                 ChapterContract.ChapterEntry.COLUMN_NAME_TITLE,
-                ChapterContract.ChapterEntry.COLUMN_NAME_SECTIONS,
-                ChapterContract.ChapterEntry.COLUMN_NAME_COMPLETED,
+           //     ChapterContract.ChapterEntry.COLUMN_NAME_SECTIONS,
+           //     ChapterContract.ChapterEntry.COLUMN_NAME_COMPLETED,
         };
 
 // Filter results WHERE "title" = 'My Title'
@@ -89,10 +89,14 @@ public class TopicActivity extends AppCompatActivity {
         );
 
         while(cursor.moveToNext()) {
-            chapters.add(new ChapterItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getInt(3), cursor.getInt(4)));
+            chapters.add(new ChapterItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2)));//, cursor.getInt(3), cursor.getInt(4)));
+        }
+        cursor.close();
+
+        for(ChapterItem chapterItem:chapters){
+            ChapterContract.ChapterEntry.setSectionsCompleted(db,chapterItem);
         }
 
-        cursor.close();
         return chapters;
     }
 }

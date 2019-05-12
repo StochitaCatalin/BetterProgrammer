@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
+import com.stochitacatalin.betterprogrammer.ChapterItem;
+
 public final class ChapterContract {
     // To prevent someone from accidentally instantiating the contract class,
     // make the constructor private.
@@ -16,51 +18,74 @@ public final class ChapterContract {
         public static final String TABLE_NAME = "chapters";
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_NAME_TOPIC = "topic";
-        public static final String COLUMN_NAME_SECTIONS = "sections";
-        public static final String COLUMN_NAME_COMPLETED = "completed";
+    //    public static final String COLUMN_NAME_SECTIONS = "sections";
+     //   public static final String COLUMN_NAME_COMPLETED = "completed";
         public static final String COLUMN_NAME_ORDER = "`order`";
 
-        public static int updateSections(SQLiteDatabase db, int _ID) {
-
+        public static boolean getCompleted(SQLiteDatabase db,int _ID){
             String[] projection = {
                     BaseColumns._ID,
+                    SectionContract.SectionEntry.COLUMN_NAME_COMPLETED
             };
 
-            String selection = SectionContract.SectionEntry.COLUMN_NAME_CHAPTER + " = ? AND " + SectionContract.SectionEntry.COLUMN_NAME_COMPLETED + " = ?";
-            String[] selectionArgs = {String.valueOf(_ID), String.valueOf(1)};
+            String selection = SectionContract.SectionEntry.COLUMN_NAME_CHAPTER + " = ?";
+            String[] selectionArgs = {String.valueOf(_ID)};
 
             Cursor cursor = db.query(
-                    SectionContract.SectionEntry.TABLE_NAME,   // The table to query
-                    projection,             // The array of columns to return (pass null to get all)
-                    selection,              // The columns for the WHERE clause
-                    selectionArgs,          // The values for the WHERE clause
-                    null,                   // don't group the rows
-                    null,                   // don't filter by row groups
-                    null               // The sort order
+                    SectionContract.SectionEntry.TABLE_NAME,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    null,
+                    null,
+                    null
             );
 
-            int completed = cursor.getCount();
+            int sections = cursor.getCount();
+            int completed = 0;
+
+            while(cursor.moveToNext()){
+                if(cursor.getInt(1) == 1){
+                    completed++;
+                }
+            }
 
             cursor.close();
 
-            updateCompleted(db,_ID,completed);
-
-            return completed;
+            return sections == completed;
         }
 
-        public static void updateCompleted(SQLiteDatabase db,int _ID,int completed){
+       public static void setSectionsCompleted(SQLiteDatabase db, ChapterItem chapterItem){
+           String[] projection = {
+                   BaseColumns._ID,
+                   SectionContract.SectionEntry.COLUMN_NAME_COMPLETED
+           };
 
-            ContentValues values = new ContentValues();
-            values.put(ChapterEntry.COLUMN_NAME_COMPLETED, completed);
+           String selection = SectionContract.SectionEntry.COLUMN_NAME_CHAPTER + " = ?";
+           String[] selectionArgs = {String.valueOf(chapterItem._ID)};
 
-            String selection = ChapterEntry._ID + " = ?";
-            String[] selectionArgs = {String.valueOf(_ID)};
+           Cursor cursor = db.query(
+                   SectionContract.SectionEntry.TABLE_NAME,
+                   projection,
+                   selection,
+                   selectionArgs,
+                   null,
+                   null,
+                   null
+           );
 
-            int count = db.update(
-                    ChapterEntry.TABLE_NAME,
-                    values,
-                    selection,
-                    selectionArgs);
-        }
+           chapterItem.sections = cursor.getCount();
+           int completed = 0;
+
+           while(cursor.moveToNext()){
+               if(cursor.getInt(1) == 1){
+                   completed++;
+               }
+           }
+
+           cursor.close();
+
+           chapterItem.completed = completed;
+       }
     }
 }

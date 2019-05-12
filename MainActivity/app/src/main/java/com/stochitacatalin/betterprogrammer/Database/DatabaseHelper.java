@@ -65,7 +65,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void installOrUpdateIfNecessary() {
-       // if (installedDatabaseIsOutdated()) {
+      //  if (installedDatabaseIsOutdated()) {
         if (true) {
             context.deleteDatabase(DATABASE_NAME);
             installDatabaseFromAssets();

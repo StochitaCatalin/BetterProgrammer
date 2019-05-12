@@ -136,10 +136,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 selection,
                 selectionArgs);
 
-        chapterItem.completed = ChapterContract.ChapterEntry.updateSections(db,chapterItem._ID);
-        if(chapterItem.completed == chapterItem.sections){
-            TopicContract.TopicEntry.updateChapters(db,chapterItem.topic);
-        }
+       // chapterItem.completed = ChapterContract.ChapterEntry.updateSections(db,chapterItem._ID);
+        //if(chapterItem.completed == chapterItem.sections){
+        //    TopicContract.TopicEntry.updateChapters(db,chapterItem.topic);
+       // }
        // if(count == 1)
            //topicItem.completed = TAB_INFO.length;
     }
